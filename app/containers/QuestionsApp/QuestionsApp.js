@@ -5,6 +5,7 @@
  */
 
 import React, {Component} from 'react';
+import '../../../app.scss';
 import PropTypes from 'prop-types';
 // import { Helmet } from 'react-helmet';
 // import { FormattedMessage } from 'react-intl';
@@ -87,8 +88,9 @@ render() {
     // const button = questions.length === indexQuestion 
 
     return (
-        <div>
+        <div className="container">
             {currentQuestion.question}
+            <form>
             <ul>
                 {currentQuestion.answers 
                     ? currentQuestion.answers.map((element, index) => {
@@ -110,6 +112,7 @@ render() {
             <br></br>
             <br></br>
             <button 
+                className="btn btn-primary"
                 disabled = {indexQuestion === 0 || indexQuestion === undefined} 
                 onclick={this.preQuestion}>
                 Back
@@ -118,10 +121,12 @@ render() {
                 
             }
             <button 
+                className="btn btn-primary"
                 onclick={this.nextQuestion}
                 disabled = {this.state.selectedAnswer === "" || this.state.selectedAnswer === undefined}>
                 Next
             </button>
+          </form>
         </div> 
     );
         {/* <article>

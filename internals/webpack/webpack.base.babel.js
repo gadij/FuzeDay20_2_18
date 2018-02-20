@@ -17,6 +17,9 @@ module.exports = (options) => ({
     path: path.resolve(process.cwd(), 'build'),
     publicPath: '/',
   }, options.output), // Merge with env dependent settings
+  node: {
+    fs: 'empty'
+  },
   module: {
     rules: [
       {
@@ -26,6 +29,14 @@ module.exports = (options) => ({
           loader: 'babel-loader',
           options: options.babelQuery,
         },
+      },
+      {
+        // Preprocess our own .css files
+        // This is the place to add your own loaders (e.g. sass/less etc.)
+        // for a list of loaders, see https://webpack.js.org/loaders/#styling
+        test: /\.scss$/,
+        exclude: /node_modules/,
+        use: ['style-loader', 'css-loader', 'sass-loader'],
       },
       {
         // Preprocess our own .css files

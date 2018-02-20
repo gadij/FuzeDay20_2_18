@@ -1,4 +1,5 @@
 import { injectGlobal } from 'styled-components';
+import '../app.scss';
 
 /* eslint no-unused-expressions: 0 */
 injectGlobal`
