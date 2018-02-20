@@ -70,7 +70,7 @@ preQuestion() {
     this.setState({
         selectedAnswer: ''
     });
-    onPrevQuestion(indexQuestion++);
+    onPrevQuestion(indexQuestion - 1);
 }
 
 nextQuestion() {
@@ -78,7 +78,7 @@ nextQuestion() {
     this.setState({
         selectedAnswer: ''
     });
-    onNextQuestion(indexQuestion++);
+    onNextQuestion(indexQuestion + 1);
 }
 
 render() {

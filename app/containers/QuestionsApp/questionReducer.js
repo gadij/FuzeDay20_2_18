@@ -16,6 +16,8 @@ import {
   LOAD_QUESTIONS_SUCCESS,
   LOAD_QUESTIONS,
   LOAD_QUESTIONS_ERROR,
+  INCREMENT_QUESTION_INDEX,
+  DECREMENT_QUESTION_INDEX
 } from './actionConstants';
 
 // The initial state of the App
