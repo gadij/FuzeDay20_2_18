@@ -24,7 +24,7 @@ import { connect } from 'react-redux';
 // import Section from './Section';
 // import messages from './messages';
 // import { loadRepos } from '../App/actions';
-import { getQuestions, getNextQuestion, getPrevQuestion} from './actions';
+import { getQuestions, getNextQuestion, getPrevQuestion, setSelectAnswer} from './actions';
 // import { makeSelectUsername } from './selectors';
 // import reducer from './reducer';
 // import saga from './saga';
@@ -35,56 +35,46 @@ export class QuestionsApp extends Component { // eslint-disable-line react/prefe
    */
   constructor(props) {
       super(props);
-      this.state = {
-          selectedAnswer: ""
-      }
+    //   this.state = {
+    //       selectedAnswer: ""
+    //   }
       this.handleOptionChange = this.handleOptionChange.bind(this);
+      this.preQuestion = this.preQuestion.bind(this);
+      this.nextQuestion = this.nextQuestion.bind(this);
   }
 
   componentWillMount() {
     this.props.getData();
   }
 
-//   getQuestion(element) {
-//       return (
-//         <li>
-//             {element.question}
-//         </li>
-//       );
-//   }
-
-//   getAnswers(element) {
-//     return (element.answers.map(answer => {
-//         return (<li>{answer.answer}</li>);
-//      }));
-//   }
-
 handleOptionChange(changeEvent) {
-    this.setState({
-        selectedAnswer: changeEvent.target.value
-    });
+    const {onSelectHandle} = this.props;
+    onSelectHandle(changeEvent.target.value, changeEvent.target.id)
 }
 
 preQuestion() {
     const {onPrevQuestion, indexQuestion} = this.props;
-    this.setState({
-        selectedAnswer: ''
-    });
     onPrevQuestion(indexQuestion - 1);
 }
 
 nextQuestion() {
     const {onNextQuestion, indexQuestion} = this.props;
-    this.setState({
-        selectedAnswer: ''
-    });
     onNextQuestion(indexQuestion + 1);
 }
 
 render() {
-    const { questions = [], indexQuestion } = this.props;
+    const { questions = [], indexQuestion, selectAnswer } = this.props;
     const currentQuestion = questions.length > 0 ? questions[indexQuestion] : {};
-    // const button = questions.length === indexQuestion 
+    const disabledPrev = indexQuestion === 0 || indexQuestion === undefined;
+    const disabledNext = selectAnswer === {} || selectAnswer === undefined;
+    const button = questions.length === indexQuestion 
+        ? <div></div>
+        : <button 
+            style={{color: disabledNext ? 'gray' : 'blue'}}
+            onClick={this.nextQuestion}
+            disabled = {disabledNext}>
+            Next
+        </button>
 
     return (
         <div>
@@ -94,10 +84,10 @@ render() {
                     ? currentQuestion.answers.map((element, index) => {
                         return (
                             // <li key={index}>{element.answer}</li>
-                            <div className="radio">
+                            <div className="radio" key={index}>
                                 <label>
-                                    <input type="radio" value={element.answer} 
-                                                checked={this.state.selectedAnswer === element.answer} 
+                                    <input id={currentQuestion.id} type="radio" value={element.answer} 
+                                                checked={selectAnswer.text === element.answer && selectAnswer.questionId == currentQuestion.id} 
                                                 onChange={this.handleOptionChange} />
                                     {element.answer}
                                 </label>
@@ -110,18 +100,12 @@ render() {
             <br></br>
             <br></br>
             <button 
-                disabled = {indexQuestion === 0 || indexQuestion === undefined} 
-                onclick={this.preQuestion}>
+                style={{color: disabledPrev ? 'gray' : 'blue'}}
+                disabled = {disabledPrev} 
+                onClick={this.preQuestion}>
                 Back
             </button>
-            {
-                
-            }
-            <button 
-                onclick={this.nextQuestion}
-                disabled = {this.state.selectedAnswer === "" || this.state.selectedAnswer === undefined}>
-                Next
-            </button>
+            {button}
         </div> 
     );
         {/* <article>
@@ -167,7 +151,8 @@ QuestionsApp.propTypes = {
   questions: PropTypes.array,
 //   onSubmitForm: PropTypes.func,
   currentUser: PropTypes.string,
-  indexQuestion: PropTypes.number
+  indexQuestion: PropTypes.number,
+  selectAnswer: PropTypes.object
 };
 
 // export function mapDispatchToProps(dispatch) {
@@ -194,14 +179,16 @@ export const mapStateToProps = state => {
         questions: game.questions,
         currentUser: game.currentUser,
         loading: game.loading,
-        error: game.error
+        error: game.error,
+        selectAnswer: game.selectAnswer
     });
 }
   
   export const mapDispatchToProps = {
     getData: getQuestions,
     onNextQuestion: getNextQuestion,
-    onPrevQuestion: getPrevQuestion
+    onPrevQuestion: getPrevQuestion,
+    onSelectHandle: setSelectAnswer
   };
   
   export default connect(mapStateToProps, mapDispatchToProps)(QuestionsApp);

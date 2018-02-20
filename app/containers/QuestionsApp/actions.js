@@ -27,6 +27,7 @@ export const LOAD_QUESTIONS_SUCCESS = 'LOAD_QUESTIONS_SUCCESS';
 export const LOAD_QUESTIONS_ERROR = 'LOAD_QUESTIONS_ERROR';
 export const INCREMENT_QUESTION_INDEX = 'INCREMENT_QUESTION_INDEX';
 export const DECREMENT_QUESTION_INDEX = 'DECREMENT_QUESTION_INDEX';
+export const SET_SELECT_ANSWER = 'SET_SELECT_ANSWER';
 // export const DEFAULT_LOCALE = 'en';
 import data from './mock';
 
@@ -40,6 +41,17 @@ export function getQuestions() {
         type: LOAD_QUESTIONS_SUCCESS,
         payload: data.questions
     };
+}
+
+export function setSelectAnswer(answerText, id) {
+    const answer = {
+        text: answerText,
+        questionId: id
+    }
+    return {
+        type: SET_SELECT_ANSWER,
+        payload: answer
+    }
 }
 
 export function getPrevQuestion(current) {

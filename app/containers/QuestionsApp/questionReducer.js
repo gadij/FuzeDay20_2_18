@@ -17,7 +17,8 @@ import {
   LOAD_QUESTIONS,
   LOAD_QUESTIONS_ERROR,
   INCREMENT_QUESTION_INDEX,
-  DECREMENT_QUESTION_INDEX
+  DECREMENT_QUESTION_INDEX,
+  SET_SELECT_ANSWER
 } from './actionConstants';
 
 // The initial state of the App
@@ -36,23 +37,29 @@ function questionReducer(state = initialState, action) {
         .set('loading', true)
         .set('error', false)
         .set('questions', [])
-        .set('currentQuestionIndex', 0);
+        .set('currentQuestionIndex', 0)
+        .set('selectAnswer', {});
     case LOAD_QUESTIONS_SUCCESS:
       return state
         .set('loading', false)
         .set('error', false)
         .set('questions', action.payload)
-        .set('currentQuestionIndex', 0);;
+        .set('currentQuestionIndex', 0)
+        .set('selectAnswer', {});
     case LOAD_QUESTIONS_ERROR:
       return state
         .set('error', true)
         .set('loading', false)
         .set('questions', [])
-        .set('currentQuestionIndex', 0);
+        .set('currentQuestionIndex', 0)
+        .set('selectAnswer', {});
     case DECREMENT_QUESTION_INDEX:
     case INCREMENT_QUESTION_INDEX:
       return state
-      .set('currentIndexQuestion', payload.current)
+      .set('currentQuestionIndex', action.payload)
+    case SET_SELECT_ANSWER:
+      return state
+      .set('selectAnswer', action.payload)
     default:
       return state;
   }
